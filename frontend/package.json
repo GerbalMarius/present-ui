@@ -18,8 +18,13 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "axios": "^1.13.2",
     "eslint": "^9",
     "eslint-config-next": "16.0.10",
+    "flatpickr": "^4.6.13",
+    "framer-motion": "^12.23.26",
+    "react-flatpickr": "^4.0.11",
+    "react-hot-toast": "^2.6.0",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

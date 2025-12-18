@@ -1,65 +1,96 @@
-import Image from "next/image";
+"use client";
+
+import { useEffect, useState } from "react";
+import { DeskData, UserData } from "./lib/types";
+import { backend } from "./lib/api";
+import NavBar from "./ui/NavBar";
+import Spinner from "./ui/Spinner";
+import DeskGrid from "./ui/DeskGrid";
+import AccountInfo from "./ui/AccountInfo";
 
 export default function Home() {
+  const [desks, setDesks] = useState<DeskData[]>([]);
+  const [me, setMe] = useState<UserData | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  const [isLoading, setIsLoading] = useState<boolean>(true)
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const [d, u] = await Promise.all([backend.getDesks(), backend.getMe()]);
+        setDesks(d);
+        setMe(u);
+        setIsLoading(false);
+      } catch (e: any) {
+        setIsLoading(false);
+        setError(e?.messages?.[0] ?? e?.err?.message ?? "Failed to load data.");
+      }
+    })();
+  }, []);
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+    <>
+      <NavBar
+        links={[
+          { label: "Desks", href: "/" },
+          { label: "Profile", href: "/profile" },
+        ]}
+        orientation="horizontal"
+        showButton={false}
+        brandName="Deski"
+        logoSrc="/img/logo.svg"
+      />
+
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 pb-16">
+        {/* Header card */}
+        <section className="mt-6 rounded-3xl bg-white/80 backdrop-blur border border-red-100 shadow-xl p-6">
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+            <div>
+              <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900">
+                Shared desks
+              </h1>
+              <p className="text-sm md:text-base text-slate-600 mt-1">
+                Desks are color-coded by status. Hover reserved desks to see who reserved them.
+              </p>
+            </div>
+            {me && <AccountInfo {...me} /> }
+          </div>
+        </section>
+
+        <section className="mt-6">
+          {error && (
+            <div className="mb-4 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-800">
+              {error}
+            </div>
+          )}
+
+          {isLoading ? (
+            <Spinner />
+          ) : (
+            <DeskGrid desks={desks} me={me} />
+          )}
+        </section>
+
+        {/* Legend */}
+        <section className="mt-6 rounded-3xl bg-white/70 backdrop-blur border border-red-100 shadow-sm p-5">
+          <h2 className="text-lg font-bold text-slate-900">Legend</h2>
+          <div className="mt-3 grid gap-3 sm:grid-cols-3 text-sm">
+            <div className="flex items-center gap-3">
+              <span className="h-3 w-3 rounded-full bg-emerald-400" />
+              <span className="text-slate-700">Open</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <span className="h-3 w-3 rounded-full bg-red-400" />
+              <span className="text-slate-700">Reserved</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <span className="h-3 w-3 rounded-full bg-slate-400" />
+              <span className="text-slate-700">Maintenance</span>
+            </div>
+          </div>
+        </section>
       </main>
-    </div>
+    </>
   );
 }
