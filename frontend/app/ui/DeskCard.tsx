@@ -1,24 +1,26 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { fullUserName, getDeskStatus, reservedByMe } from "../lib/desk-status";
+import { DeskStatus, fullUserName, getDeskStatus, reservedByMe } from "../lib/desk-status";
 import { DeskData, UserData } from "../lib/types";
 import { ApiError, backend } from "../lib/api";
 import DateRangePicker from "./DateRangePicker";
 import { useToast } from "../lib/toast-context";
-import { cardClasses, hoverInfo, pillAccent, statusPillClasses } from "../lib/card-utils";
+import { cardClasses, formatDate, hoverInfo, pillAccent, statusPillClasses } from "../lib/card-utils";
 
 
 export default function DeskCard({
   desk,
   me,
+  onChanged,
 }: {
   desk: DeskData;
   me: UserData | null;
+  onChanged?: () => Promise<void> | void;
 }) {
-  const status = useMemo(() => getDeskStatus(desk), [desk]);
-  const name = useMemo(() => fullUserName(desk), [desk]);
-  const isMine = useMemo(() => reservedByMe(desk, me), [desk, me]);
+  const status: DeskStatus = useMemo(() => getDeskStatus(desk), [desk]);
+  const name: string | null = useMemo(() => fullUserName(desk), [desk]);
+  const isMine: boolean = useMemo(() => reservedByMe(desk, me), [desk, me]);
 
   const { showToast } = useToast();
 
@@ -28,6 +30,8 @@ export default function DeskCard({
 
   const canConfirm = !!range[0] && !!range[1] && !busy;
   const info = useMemo(() => hoverInfo(status, name), [status, name]);
+
+  const preview = desk.reservationPreview;
 
   async function reserve() {
     if (!me) return;
@@ -43,10 +47,46 @@ export default function DeskCard({
       });
 
       showToast("Reservation placed successfully", "success");
-      window.location.reload();
+      await onChanged?.();
+      setOpenPicker(false);
+      setRange([null, null]);
     } catch (e: any) {
       const apiErr = e as ApiError;
       const msg = apiErr?.messages?.[0] ?? apiErr?.err?.message ?? "Failed to reserve.";
+      showToast(msg, "error");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function cancelDay() {
+    if (!preview) return;
+
+    setBusy(true);
+    try {
+      await backend.cancelReservationDay(preview.id);
+      showToast("Cancelled reservation for a day", "success");
+      await onChanged?.();
+    } catch (e: any) {
+      const apiErr = e as ApiError;
+      const msg = apiErr?.messages?.[0] ?? apiErr?.err?.message ?? "Failed to cancel.";
+      showToast(msg, "error");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function cancelWhole() {
+    if (!preview) return;
+
+    setBusy(true);
+    try {
+      await backend.cancelReservationWhole(preview.id);
+      showToast("Cancelled the reservation successfully", "success");
+      await onChanged?.();
+    } catch (e: any) {
+      const apiErr = e as ApiError;
+      const msg = apiErr?.messages?.[0] ?? apiErr?.err?.message ?? "Failed to cancel.";
       showToast(msg, "error");
     } finally {
       setBusy(false);
@@ -61,12 +101,11 @@ export default function DeskCard({
         cardClasses(status),
       ].join(" ")}
     >
-      {/* Hover popup */}
       <div
         className={[
           "pointer-events-none absolute z-20",
           "left-1/2 -translate-x-1/2 -top-3",
-          openPicker ?  "hidden" : "hidden group-hover:block",
+          openPicker ? "hidden" : "hidden group-hover:block",
         ].join(" ")}
       >
         <div className="relative w-80 rounded-2xl bg-white/95 backdrop-blur border border-red-100 shadow-2xl p-4">
@@ -74,6 +113,7 @@ export default function DeskCard({
             <div className="text-xs font-extrabold tracking-wide text-slate-900 uppercase">
               {info.title}
             </div>
+
             {status === "reserved" && isMine && (
               <span className="text-[10px] font-bold px-2 py-1 rounded-full bg-red-100 text-red-800 border border-red-200">
                 Yours
@@ -84,6 +124,17 @@ export default function DeskCard({
           <div className="mt-2 text-sm font-semibold text-slate-700 leading-snug">
             {info.body}
           </div>
+
+          {status === "reserved" && preview && (
+            <div className="mt-3 rounded-xl border border-red-100 bg-red-50/40 px-3 py-2">
+              <div className="text-[11px] font-extrabold uppercase tracking-wide text-slate-700">
+                Reserved dates
+              </div>
+              <div className="mt-1 text-sm font-black text-slate-900">
+                {formatDate(preview.reservedFrom)} - {formatDate(preview.reservedTo)}
+              </div>
+            </div>
+          )}
 
           <div className="absolute left-1/2 -translate-x-1/2 -bottom-2 h-4 w-4 rotate-45 bg-white/95 border-b border-r border-red-100" />
         </div>
@@ -112,6 +163,17 @@ export default function DeskCard({
         </span>
       </div>
 
+      {status === "reserved" && preview && (
+        <div className="mt-4 rounded-2xl border border-red-200 bg-white/70 px-4 py-3">
+          <div className="text-xs font-extrabold uppercase tracking-wide text-slate-700">
+            Reserved dates
+          </div>
+          <div className="mt-1 text-sm font-black text-slate-900">
+            {formatDate(preview.reservedFrom)} - {formatDate(preview.reservedTo)}
+          </div>
+        </div>
+      )}
+
       {/* Actions */}
       <div className="mt-6">
         {status === "open" && (
@@ -132,7 +194,8 @@ export default function DeskCard({
                   onClick={reserve}
                   disabled={!canConfirm}
                   className={`inline-flex items-center justify-center rounded-2xl px-4 py-2.5 text-sm font-extrabold
-                    bg-red-700 text-white shadow-lg hover:bg-red-600 transition disabled:opacity-60"`}
+                    bg-red-700 text-white shadow-lg hover:bg-red-600 transition disabled:opacity-60
+                    ${canConfirm ? "cursor-pointer" : "cursor-not-allowed"}`}
                 >
                   {busy ? "Reserving..." : "Confirm reservation"}
                 </button>
@@ -153,16 +216,18 @@ export default function DeskCard({
           </div>
         )}
 
-        {status === "reserved" && isMine && (
+        {status === "reserved" && isMine && preview && (
           <div className="flex flex-wrap gap-2">
             <button
-              onClick={() => alert("Cancel for this day (needs backend cancel endpoint).")}
-              className="rounded-2xl px-4 py-2.5 text-sm font-bold bg-white/80 border border-red-200 hover:bg-red-50 transition"
+              onClick={cancelDay}
+              disabled={busy}
+              className="rounded-2xl px-4 py-2.5 text-sm font-bold bg-white/80 border border-red-200 hover:bg-red-50 transition disabled:opacity-60"
             >
               Cancel day
             </button>
+
             <button
-              onClick={() => alert("Cancel whole range (needs backend cancel endpoint).")}
+              onClick={cancelWhole}
               className="rounded-2xl px-4 py-2.5 text-sm font-bold bg-white/80 border border-red-200 hover:bg-red-50 transition"
             >
               Cancel range

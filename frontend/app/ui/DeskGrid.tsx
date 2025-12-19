@@ -1,21 +1,22 @@
-
 "use client";
 
-import { DeskData, UserData } from "../lib/types";
 import DeskCard from "./DeskCard";
+import type { DeskData, UserData } from "../lib/types";
 
 export default function DeskGrid({
   desks,
   me,
+  onChanged,
 }: {
   desks: DeskData[];
   me: UserData | null;
+  onChanged?: () => Promise<void> | void;
 }) {
   return (
-    <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {desks.map((desk) => (
-        <DeskCard key={desk.id} desk={desk} me={me} />
+        <DeskCard key={desk.id} desk={desk} me={me} onChanged={onChanged} />
       ))}
-    </section>
+    </div>
   );
 }

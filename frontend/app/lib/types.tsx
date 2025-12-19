@@ -5,11 +5,18 @@ export type UserData = {
   lastName: string;
 };
 
+export type ReservationPreview = {
+  id: number;
+  reservedFrom: string;
+  reservedTo: string;
+};
+
 export type DeskData = {
-    id : number;
-    isReserved : boolean;
-    isInMaintenance : boolean;
-    reservedBy: UserData | null
+  id: number;
+  isReserved: boolean;
+  isInMaintenance: boolean;
+  reservedBy: UserData | null;
+  reservationPreview: ReservationPreview | null;
 }
 
 export type ReservationData = {
@@ -18,4 +25,9 @@ export type ReservationData = {
      // iso dates
     reservedFrom : string;
     reservedTo : string;
+}
+
+export type CurrentUserReservations = {
+      currentReservations : ReservationData[];
+      pastReservations : ReservationData[];
 }

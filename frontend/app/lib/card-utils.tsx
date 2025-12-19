@@ -42,3 +42,8 @@ export function pillAccent(status: DeskStatus) {
   if (status === "reserved") return "ring-red-200/70 shadow-red-200/30";
   return "ring-slate-200/70 shadow-slate-200/30";
 }
+
+export function formatDate(iso: string) : string {
+  const d = new Date(iso);
+  return Number.isNaN(d.getTime()) ? iso : d.toLocaleDateString();
+}

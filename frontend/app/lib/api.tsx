@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from "axios"
 import { getErrorMessagesFromError } from "./api-error";
-import { DeskData, ReservationData, UserData } from "./types";
+import { CurrentUserReservations, DeskData, ReservationData, UserData } from "./types";
 
 const BACKEND_URL: string = process.env.PUBLIC_API_URL || "https://localhost:7181/api";
 
@@ -44,6 +44,19 @@ export const backend = {
     async createReservation(body : ReservationData) : Promise<ReservationData> {
         const res: AxiosResponse<ReservationData, any, {} > = await api.post<ReservationData>("/reservations", body);
         return res.data;
+    },
+
+    async getMeReservations() : Promise<CurrentUserReservations> {
+        const res : AxiosResponse<CurrentUserReservations, any, {}> = await api.get<CurrentUserReservations>("/users/me/reservations");
+        return res.data;
+    },
+
+    async cancelReservationDay(id : number) : Promise<void> {
+        await api.patch(`/reservations/${id}/day`);
+    },
+
+    async cancelReservationWhole(id : number) : Promise<void> {
+        await api.delete(`/reservations/${id}`);
     }
 }
 
