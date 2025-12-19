@@ -30,7 +30,6 @@ export const ToastProvider = ({ children }: { children: ReactNode }) => {
 
     setToasts((prev) => [...prev, { id, message, type }]);
 
-    // auto-hide after 3s
     setTimeout(() => {
       setToasts((prev) => prev.filter((t) => t.id !== id));
     }, 3000);
@@ -40,7 +39,6 @@ export const ToastProvider = ({ children }: { children: ReactNode }) => {
     <ToastContext.Provider value={{ showToast }}>
       {children}
 
-      {/* Toast container */}
       <div className="pointer-events-none fixed top-4 right-4 z-9999 flex flex-col gap-2">
         {toasts.map((t) => (
           <div

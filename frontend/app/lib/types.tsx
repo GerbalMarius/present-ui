@@ -22,7 +22,6 @@ export type DeskData = {
 export type ReservationData = {
     userId : number;
     deskId : number;
-     // iso dates
     reservedFrom : string;
     reservedTo : string;
 }

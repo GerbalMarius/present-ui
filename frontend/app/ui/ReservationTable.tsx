@@ -42,7 +42,7 @@ const ReservationTable = ({
                   className="border-t border-red-100/60 hover:bg-red-50/40 transition"
                 >
                   <td className="px-5 py-3 font-extrabold text-slate-900">
-                    {r.deskId}
+                    {`#${r.deskId}`}
                   </td>
                   <td className="px-5 py-3 font-semibold text-slate-700">
                     {formatDate(r.reservedFrom)}

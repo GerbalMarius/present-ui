@@ -3,7 +3,7 @@
 import DeskCard from "./DeskCard";
 import type { DeskData, UserData } from "../lib/types";
 
-export default function DeskGrid({
+const DeskGrid = ({
   desks,
   me,
   onChanged,
@@ -11,7 +11,7 @@ export default function DeskGrid({
   desks: DeskData[];
   me: UserData | null;
   onChanged?: () => Promise<void> | void;
-}) {
+}) => {
   return (
     <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {desks.map((desk) => (
@@ -20,3 +20,5 @@ export default function DeskGrid({
     </div>
   );
 }
+
+export default DeskGrid;

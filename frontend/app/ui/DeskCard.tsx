@@ -9,7 +9,7 @@ import { useToast } from "../lib/toast-context";
 import { cardClasses, formatDate, hoverInfo, pillAccent, statusPillClasses } from "../lib/card-utils";
 
 
-export default function DeskCard({
+const DeskCard = ({
   desk,
   me,
   onChanged,
@@ -17,7 +17,7 @@ export default function DeskCard({
   desk: DeskData;
   me: UserData | null;
   onChanged?: () => Promise<void> | void;
-}) {
+}) => {
   const status: DeskStatus =  getDeskStatus(desk)
   const name: string | null = fullUserName(desk);
   const isMine: boolean = reservedByMe(desk, me);
@@ -128,7 +128,7 @@ export default function DeskCard({
           {status === "reserved" && preview && (
             <div className="mt-3 rounded-xl border border-red-100 bg-red-50/40 px-3 py-2">
               <div className="text-[11px] font-extrabold uppercase tracking-wide text-slate-700">
-                Reserved dates
+                Reserved date
               </div>
               <div className="mt-1 text-sm font-black text-slate-900">
                 {formatDate(preview.reservedFrom)} - {formatDate(preview.reservedTo)}
@@ -229,3 +229,5 @@ export default function DeskCard({
     </div>
   );
 }
+
+export default DeskCard;

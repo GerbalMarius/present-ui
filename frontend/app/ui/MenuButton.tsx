@@ -21,7 +21,7 @@ const MenuButton = ({
       onClick={onClick}
       className={[
         "w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition",
-        "focus:outline-none focus:ring-2 focus:ring-red-300",
+        "focus:outline-none focus:ring-2 focus:ring-red-300 hover:cursor-pointer",
         active
           ? "bg-red-100 text-red-900 shadow-sm border border-red-200"
           : "text-red-900/80 hover:bg-red-50 hover:text-red-950",

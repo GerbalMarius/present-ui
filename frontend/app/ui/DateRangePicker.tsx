@@ -29,24 +29,24 @@ const DateRangePicker = ({
     return () => mq.removeEventListener("change", update);
   }, []);
 
-  const options = useMemo(
-    () => ({
+  const options = {
       mode: "range" as const,
       dateFormat: "Y-m-d",
       minDate,
       showMonths: isMobile ? 1 : 2,
       animate: true,
       position: "auto" as const,
-    }),
-    [minDate, isMobile]
-  );
+      allowInput : false
+    };
 
   return (
     <div className="w-full">
       <Flatpickr
         value={value.filter(Boolean) as Date[]}
         options={options}
-        onChange={(dates: Date[]) => onChange([dates[0] ?? null, dates[1] ?? null])}
+        onChange={(dates: Date[], _str, instance) => {
+          onChange([dates[0] ?? null, dates[1] ?? null])
+        }}
         disabled={disabled}
         placeholder="Select date to reserve the desks for"
         className="

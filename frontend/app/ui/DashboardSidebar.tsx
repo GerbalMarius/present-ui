@@ -55,7 +55,9 @@ export default function DashboardSidebar({
 
       <button
         onClick={onExit}
-        className="mt-6 inline-flex items-center justify-center gap-2 rounded-xl text-sm font-semibold px-4 py-2 shadow-md transition bg-red-800 text-white hover:bg-red-700"
+        className="mt-6 inline-flex items-center justify-center gap-2 rounded-xl 
+        text-sm font-semibold px-4 py-2 shadow-md transition bg-red-800 text-white hover:bg-red-700
+        hover:cursor-pointer"
       >
         {exitLabel}
       </button>

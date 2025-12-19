@@ -10,7 +10,7 @@ import ReservationTable from "../ui/ReservationTable";
 
 
 
-export default function ProfilePage() {
+ const ProfilePage = () => {
     const router = useRouter();
     const path = usePathname();
 
@@ -70,7 +70,7 @@ export default function ProfilePage() {
 
                     <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
                         <div>
-                            <div className="text-sm font-extrabold text-red-700">hello ;3</div>
+                            <div className="text-sm font-extrabold text-red-700">Welcome back!</div>
 
                             <h1 className="mt-1 text-3xl md:text-4xl font-black tracking-tight text-slate-900">
                                 {me.firstName} {me.lastName}
@@ -82,7 +82,8 @@ export default function ProfilePage() {
                         <button
                             onClick={() => router.push("/")}
                             className="md:hidden inline-flex items-center justify-center rounded-2xl px-5 py-3
-                text-sm font-extrabold bg-red-700 text-white shadow-lg hover:bg-red-600 transition"
+                            text-sm font-extrabold bg-red-700 text-white shadow-lg hover:bg-red-600 transition
+                            hover:cursor-pointer"
                         >
                             Exit
                         </button>
@@ -105,3 +106,5 @@ export default function ProfilePage() {
         </div>
     );
 }
+
+export default ProfilePage;
