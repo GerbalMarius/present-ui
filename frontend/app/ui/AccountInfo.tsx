@@ -1,4 +1,3 @@
-import { UserData } from "../lib/types";
 
 type AccountProps = {
     firstName : string;
@@ -6,7 +5,7 @@ type AccountProps = {
     email : string;
 }
 
-const AccountInfo = (props : AccountProps) => {
+const AccountInfo = ({firstName, lastName, email} : AccountProps) => {
 
     return (
         <>
@@ -19,8 +18,8 @@ const AccountInfo = (props : AccountProps) => {
                 {/* Avatar */}
                 <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-red-600 text-white shadow-md">
                     <span className="text-lg font-black">
-                        {props.firstName[0]}
-                        {props.lastName[0]}
+                        {firstName[0]}
+                        {lastName[0]}
                     </span>
                 </div>
 
@@ -31,11 +30,11 @@ const AccountInfo = (props : AccountProps) => {
                     </span>
 
                     <span className="text-lg font-extrabold tracking-tight text-slate-900">
-                        {props.firstName} {props.lastName}
+                        {firstName} {lastName}
                     </span>
 
                     <span className="text-sm font-medium text-slate-600">
-                        {props.email}
+                        {email}
                     </span>
                 </div>
             </div>

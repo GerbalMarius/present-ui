@@ -1,16 +1,16 @@
 import { DeskData, UserData } from "./types";
 
 
-export type DeskStatus = "Open" | "Reserved" | "Maintenance";
+export type DeskStatus = "open" | "reserved" | "maintenance";
 
 export function getDeskStatus(desk : DeskData) : DeskStatus {
     if (desk.isInMaintenance) {
-        return "Maintenance";
+        return "maintenance";
     }
     if (desk.isReserved) {
-        return "Reserved";
+        return "reserved";
     }
-    return "Open"; 
+    return "open"; 
 }
 
 export function fullUserName(desk : DeskData) : string | null {

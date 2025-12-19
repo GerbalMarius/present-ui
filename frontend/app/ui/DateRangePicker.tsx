@@ -6,23 +6,23 @@ import { useEffect, useMemo, useState } from "react";
 
 type DateRange = [Date | null, Date | null];
 
-type Props = {
+type DatePickerProps = {
   value: DateRange;
   onChange: (range: DateRange) => void;
   minDate?: Date;
   disabled?: boolean;
 };
 
-export default function DateRangePicker({
+const DateRangePicker = ({
   value,
   onChange,
   minDate = new Date(),
   disabled = false,
-}: Props) {
-  const [isMobile, setIsMobile] = useState(false);
+}: DatePickerProps) => {
+  const [isMobile, setIsMobile] = useState<boolean>(false);
 
   useEffect(() => {
-    const mq = window.matchMedia("(max-width: 640px)");
+    const mq: MediaQueryList = window.matchMedia("(max-width: 640px)");
     const update = () => setIsMobile(mq.matches);
     update();
     mq.addEventListener("change", update);
@@ -62,3 +62,5 @@ export default function DateRangePicker({
     </div>
   );
 }
+
+export default DateRangePicker;

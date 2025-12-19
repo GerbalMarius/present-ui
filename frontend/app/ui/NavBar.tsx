@@ -6,21 +6,19 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { MenuState, NavBarProps } from "../lib/navbar-utils";
 
-export default function NavBar({
+const NavBar = ({
     links,
     orientation = "horizontal",
     showLogo = true,
-    brandName = "DeskFlow",
+    brandName,
     logoSrc = "/img/logo.svg",
-}: NavBarProps) {
+}: NavBarProps) => {
     const [menuState, setMenuState] = useState<MenuState>("closed");
-    const [authOpen, setAuthOpen] = useState(false);
 
     const btnRef = useRef<HTMLButtonElement | null>(null);
     const menuRef = useRef<HTMLElement | null>(null);
-    const authRef = useRef<HTMLDivElement | null>(null);
 
-    const pathName = usePathname();
+    const pathName : string = usePathname();
 
     const isActive = menuState === "opening" || menuState === "open";
     const isVisible = menuState !== "closed";
@@ -49,19 +47,6 @@ export default function NavBar({
         document.addEventListener("click", onClick);
         return () => document.removeEventListener("click", onClick);
     }, [menuState]);
-
-    useEffect(() => {
-        if (!authOpen) return;
-
-        const onClick = (e: MouseEvent) => {
-            const target = e.target as Node;
-            if (authRef.current?.contains(target)) return;
-            setAuthOpen(false);
-        };
-
-        document.addEventListener("click", onClick);
-        return () => document.removeEventListener("click", onClick);
-    }, [authOpen]);
 
     const desktopNavClasses = isHorizontal
         ? "hidden md:flex flex-row items-center justify-center gap-6 text-sm md:text-base font-semibold"
@@ -162,3 +147,5 @@ export default function NavBar({
         </header>
     );
 }
+
+export default NavBar;

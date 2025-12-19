@@ -74,7 +74,7 @@ export default function DeskCard({
             <div className="text-xs font-extrabold tracking-wide text-slate-900 uppercase">
               {info.title}
             </div>
-            {status === "Reserved" && isMine && (
+            {status === "reserved" && isMine && (
               <span className="text-[10px] font-bold px-2 py-1 rounded-full bg-red-100 text-red-800 border border-red-200">
                 Yours
               </span>
@@ -114,7 +114,7 @@ export default function DeskCard({
 
       {/* Actions */}
       <div className="mt-6">
-        {status === "Open" && (
+        {status === "open" && (
           <div className="flex flex-col gap-3">
             {!openPicker ? (
               <button
@@ -131,8 +131,8 @@ export default function DeskCard({
                 <button
                   onClick={reserve}
                   disabled={!canConfirm}
-                  className="inline-flex items-center justify-center rounded-2xl px-4 py-2.5 text-sm font-extrabold
-                    bg-red-700 text-white shadow-lg hover:bg-red-600 transition disabled:opacity-60"
+                  className={`inline-flex items-center justify-center rounded-2xl px-4 py-2.5 text-sm font-extrabold
+                    bg-red-700 text-white shadow-lg hover:bg-red-600 transition disabled:opacity-60"`}
                 >
                   {busy ? "Reserving..." : "Confirm reservation"}
                 </button>
@@ -153,7 +153,7 @@ export default function DeskCard({
           </div>
         )}
 
-        {status === "Reserved" && isMine && (
+        {status === "reserved" && isMine && (
           <div className="flex flex-wrap gap-2">
             <button
               onClick={() => alert("Cancel for this day (needs backend cancel endpoint).")}

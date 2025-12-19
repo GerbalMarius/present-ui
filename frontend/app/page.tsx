@@ -36,7 +36,6 @@ export default function Home() {
           { label: "Desks", href: "/" },
           { label: "Profile", href: "/profile" },
         ]}
-        orientation="horizontal"
         showButton={false}
         brandName="Deski"
         logoSrc="/img/logo.svg"
