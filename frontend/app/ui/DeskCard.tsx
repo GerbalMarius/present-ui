@@ -18,9 +18,9 @@ export default function DeskCard({
   me: UserData | null;
   onChanged?: () => Promise<void> | void;
 }) {
-  const status: DeskStatus = useMemo(() => getDeskStatus(desk), [desk]);
-  const name: string | null = useMemo(() => fullUserName(desk), [desk]);
-  const isMine: boolean = useMemo(() => reservedByMe(desk, me), [desk, me]);
+  const status: DeskStatus =  getDeskStatus(desk)
+  const name: string | null = fullUserName(desk);
+  const isMine: boolean = reservedByMe(desk, me);
 
   const { showToast } = useToast();
 
@@ -29,7 +29,7 @@ export default function DeskCard({
   const [range, setRange] = useState<[Date | null, Date | null]>([null, null]);
 
   const canConfirm = !!range[0] && !!range[1] && !busy;
-  const info = useMemo(() => hoverInfo(status, name), [status, name]);
+  const info =  hoverInfo(status, name);
 
   const preview = desk.reservationPreview;
 
@@ -104,7 +104,7 @@ export default function DeskCard({
       <div
         className={[
           "pointer-events-none absolute z-20",
-          "left-1/2 -translate-x-1/2 -top-3",
+          "left-1/2 -translate-x-1/2 -top-14",
           openPicker ? "hidden" : "hidden group-hover:block",
         ].join(" ")}
       >
@@ -163,16 +163,7 @@ export default function DeskCard({
         </span>
       </div>
 
-      {status === "reserved" && preview && (
-        <div className="mt-4 rounded-2xl border border-red-200 bg-white/70 px-4 py-3">
-          <div className="text-xs font-extrabold uppercase tracking-wide text-slate-700">
-            Reserved dates
-          </div>
-          <div className="mt-1 text-sm font-black text-slate-900">
-            {formatDate(preview.reservedFrom)} - {formatDate(preview.reservedTo)}
-          </div>
-        </div>
-      )}
+  
 
       {/* Actions */}
       <div className="mt-6">
