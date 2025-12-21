@@ -19,14 +19,14 @@ interface DashboardSidebarProps {
   exitLabel?: string;
 }
 
-export default function DashboardSidebar({
+const DashboardSidebar = ({
   title,
   subtitle,
   avatarText,
   links,
   onExit,
   exitLabel = "Exit",
-}: DashboardSidebarProps) {
+}: DashboardSidebarProps) => {
   return (
     <aside className="hidden md:flex md:w-64 lg:w-72 bg-linear-to-b from-red-200 via-red-300 to-red-400 text-slate-900 flex-col py-6 px-4 shadow-xl">
       <div className="flex items-center gap-3 px-2 mb-8">
@@ -64,3 +64,5 @@ export default function DashboardSidebar({
     </aside>
   );
 }
+
+export default DashboardSidebar;

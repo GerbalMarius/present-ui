@@ -5,7 +5,7 @@ type NavLink = {
     href: string;
 };
 
-export interface NavBarProps {
+export type NavBarProps  = {
     links: NavLink[];
     orientation?: "horizontal" | "vertical";
     showLogo?: boolean;

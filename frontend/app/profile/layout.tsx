@@ -12,7 +12,7 @@ const ProfileLayout = ({
   children,
 }: Readonly<{
   children: React.ReactNode;
-}>) =>{
+}>) => {
   const router = useRouter();
   const path = usePathname();
 
@@ -33,7 +33,7 @@ const ProfileLayout = ({
 
   const avatarText = useMemo(() => {
     if (!me) return "?";
-    return `${me.firstName?.[0] ?? "?"}${me.lastName?.[0] ?? "?"}`.toUpperCase();
+    return `${me.firstName[0]}${me.lastName[0]}`.toUpperCase();
   }, [me]);
 
   const sidebarLinks = useMemo(

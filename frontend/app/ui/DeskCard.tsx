@@ -5,7 +5,7 @@ import { DeskStatus, fullUserName, getDeskStatus, reservedByMe } from "../lib/de
 import { DeskData, UserData } from "../lib/types";
 import { ApiError, backend } from "../lib/api";
 import DateRangePicker from "./DateRangePicker";
-import { useToast } from "../lib/toast-context";
+import { useToast } from "../lib/ToastContext";
 import { cardClasses, formatDate, hoverInfo, pillAccent, statusPillClasses } from "../lib/card-utils";
 import Spinner from "./Spinner";
 

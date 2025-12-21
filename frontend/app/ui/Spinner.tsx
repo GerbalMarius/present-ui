@@ -1,5 +1,5 @@
 
-interface SpinnerProps {
+type SpinnerProps =  {
     inline? : boolean;
 }
 

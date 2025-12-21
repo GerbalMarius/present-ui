@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Poppins, Roboto } from "next/font/google";
 import "./globals.css";
-import { ToastProvider } from "./lib/toast-context";
+import { ToastProvider } from "./lib/ToastContext";
 
 const roboto = Roboto({
   weight: ["100", "300", "400", "500", "700", "900"],
