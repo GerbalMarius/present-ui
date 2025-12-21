@@ -180,10 +180,10 @@ const DeskCard = ({
 
                 <button
                   onClick={reserve}
-                  disabled={!canConfirm}
+                  disabled={!canConfirm || busy}
                   className={`inline-flex items-center justify-center rounded-2xl px-4 py-2.5 text-sm font-extrabold
                     bg-red-700 text-white shadow-lg hover:bg-red-600 transition disabled:opacity-60
-                    ${canConfirm ? "opacity-100 cursor-pointer" : "opacity:60 cursor-not-allowed"}`}
+                    ${canConfirm || !busy ? "opacity-100 cursor-pointer" : "opacity:60 cursor-not-allowed"}`}
                 >
                   <span className={busy ? "opacity-60" : "opacity-100"}>
                     {busy ? "Reserving..." : "Confirm reservation"}
