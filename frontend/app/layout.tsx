@@ -11,10 +11,7 @@ const roboto = Roboto({
 });
 
 const poppins = Poppins({
-  weight: [
-    "100", "200", "300", "400", "500",
-    "600", "700", "800", "900",
-  ],
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
   style: ["normal"],
   subsets: ["latin"],
   variable: "--font-poppins",
@@ -25,20 +22,21 @@ export const metadata: Metadata = {
   description: "Shared desk space reservations",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+const RootLayout = (
+  { children }
+  : { 
+  children: Readonly<React.ReactNode>
+}) => {
   return (
-    <html lang="en-US"  className={`${roboto.variable} ${poppins.variable} antialiased sm:scroll-smooth`}>
+    <html
+      lang="en-US"
+      className={`${roboto.variable} ${poppins.variable} antialiased sm:scroll-smooth`}
+    >
       <body>
-        <main>
-          <ToastProvider>
-            {children}
-          </ToastProvider>
-        </main>
+        <ToastProvider>{children}</ToastProvider>
       </body>
     </html>
   );
 }
+
+export default RootLayout;

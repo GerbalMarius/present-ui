@@ -1,12 +1,13 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { DeskStatus, fullUserName, getDeskStatus, reservedByMe } from "../lib/desk-status";
 import { DeskData, UserData } from "../lib/types";
 import { ApiError, backend } from "../lib/api";
 import DateRangePicker from "./DateRangePicker";
 import { useToast } from "../lib/toast-context";
 import { cardClasses, formatDate, hoverInfo, pillAccent, statusPillClasses } from "../lib/card-utils";
+import Spinner from "./Spinner";
 
 
 const DeskCard = ({
@@ -18,7 +19,7 @@ const DeskCard = ({
   me: UserData | null;
   onChanged?: () => Promise<void> | void;
 }) => {
-  const status: DeskStatus =  getDeskStatus(desk)
+  const status: DeskStatus = getDeskStatus(desk)
   const name: string | null = fullUserName(desk);
   const isMine: boolean = reservedByMe(desk, me);
 
@@ -29,7 +30,7 @@ const DeskCard = ({
   const [range, setRange] = useState<[Date | null, Date | null]>([null, null]);
 
   const canConfirm = !!range[0] && !!range[1] && !busy;
-  const info =  hoverInfo(status, name);
+  const info = hoverInfo(status, name);
 
   const preview = desk.reservationPreview;
 
@@ -140,7 +141,6 @@ const DeskCard = ({
         </div>
       </div>
 
-      {/* Header */}
       <div className="flex items-start justify-between gap-3">
         <div>
           <div className="text-xs font-semibold tracking-wide uppercase text-slate-600">
@@ -163,9 +163,6 @@ const DeskCard = ({
         </span>
       </div>
 
-  
-
-      {/* Actions */}
       <div className="mt-6">
         {status === "open" && (
           <div className="flex flex-col gap-3">
@@ -186,9 +183,15 @@ const DeskCard = ({
                   disabled={!canConfirm}
                   className={`inline-flex items-center justify-center rounded-2xl px-4 py-2.5 text-sm font-extrabold
                     bg-red-700 text-white shadow-lg hover:bg-red-600 transition disabled:opacity-60
-                    ${canConfirm ? "cursor-pointer" : "cursor-not-allowed"}`}
+                    ${canConfirm ? "opacity-100 cursor-pointer" : "opacity:60 cursor-not-allowed"}`}
                 >
-                  {busy ? "Reserving..." : "Confirm reservation"}
+                  <span className={busy ? "opacity-60" : "opacity-100"}>
+                    {busy ? "Reserving..." : "Confirm reservation"}
+                  </span>
+
+                  {busy && (
+                    <Spinner inline />
+                  )}
                 </button>
 
                 <button

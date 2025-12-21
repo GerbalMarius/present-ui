@@ -58,23 +58,6 @@
   --tracking-wide: 0.03em;
 }
 
-@keyframes bg-breathe {
-  0% {
-    background-position: 0% 0%;
-    filter: brightness(1);
-  }
-
-  50% {
-    background-position: 100% 100%;
-    filter: brightness(1.03);
-  }
-
-  100% {
-    background-position: 0% 0%;
-    filter: brightness(1);
-  }
-}
-
 @keyframes toast-in {
   0% {
     transform: translateY(-10px);
@@ -111,17 +94,15 @@
   }
 }
 
+
 body {
-  body {
-    background: var(--bg);
     background-size: 200% 200%;
     color: var(--fg);
     min-height: 100vh;
     font-family: var(--font-body);
-    animation: bg-breathe 18s ease-in-out infinite;
   }
-}
 
+  
 
 .underline-hover {
   position: relative;
